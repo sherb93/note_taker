@@ -21,16 +21,20 @@ app.use(express.static("public"));
 
 // Responds with notes.html when /notes URL is requested
 app.get("/notes", (req, res) => {
+    console.log(`GET REQUEST AT ${req.path} MADE`)
     res.sendFile(path.join(__dirname, "/public/notes.html"))
 })
 
 // Routes for /api/notes. Fetch requests are made through this path to gather notes data from db.json
 app
     .route("/api/notes")
-    .get((req, res) => res.json(notesDB))
+    .get((req, res) => {
+        console.log(`GET REQUEST AT api/notes MADE`)
+        res.json(notesDB);
+    })
     .post((req, res) => {
         console.log(`${req.method} has been receieved`);
-        console.info(req.body);
+        console.info(req.body.title);
         const { title, text } = req.body; // Make a copy of the req so we aren't mutating the original
 
         // If all required properties are present then make copy with uuid
@@ -45,11 +49,11 @@ app
                 if (err) {
                     console.error(err);
                 } else {
-                    const parsedNotes = JSON.parse(data, null, 4);
+                    const parsedNotes = JSON.parse(data);
     
                     parsedNotes.push(newNote)
 
-                    fs.writeFile("./db/db.json", JSON.stringify(parsedNotes), writeErr =>
+                    fs.writeFile("./db/db.json", JSON.stringify(parsedNotes, null, 4), writeErr =>
                     writeErr
                         ? console.error(writeErr)
                         : console.log("Successfully updated reviews")
@@ -62,8 +66,8 @@ app
                 body: newNote
             };
 
-            console.log("Response: " + res.json(response))
-            res.status(200).json(response) 
+            res.status(201).json(response);
+            console.log("Response: " + JSON.stringify(newNote))
         } else {
             res.status(500).json("Error in posting note");
         }
@@ -79,7 +83,3 @@ app.get("*", (req, res) => {
 app.listen(PORT, () => {
     console.log(`Express server listening on port http://localhost:${PORT}`)
 });
-
-
-
-//POST /api/notes should receive a new note to save on the request body, add it to the db.json file, and then return the new note to the client. You'll need to find a way to give each note a unique id when it's saved (look into npm packages that could do this for you).

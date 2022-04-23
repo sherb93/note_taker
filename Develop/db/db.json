@@ -1,1 +1,16 @@
-[{"title":"Test Title","text":"Test text"},{"title":"random notes","text":"rfdskjalfjdskl","id":"33bb1c06-a44a-472e-bc40-82da8a4ccb43"},{"title":"fdsahfldsa","text":"fdjsklaf;ds","id":"18d9c795-ab8b-4aee-b247-d50ad95a31d9"}]
+[
+    {
+        "title": "Test Title",
+        "text": "Test text"
+    },
+    {
+        "title": "Lisa's Birthday",
+        "text": "Lisa's party is on 4/25/22",
+        "id": "b38dfcc8-6862-4989-beab-c2aa30950d67"
+    },
+    {
+        "title": "Groceries",
+        "text": "pick up groceries from kroger on 4/23/22",
+        "id": "93f49c91-384a-4923-85f3-720a2dea4573"
+    }
+]
