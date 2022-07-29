@@ -1,13 +1,13 @@
 const router = require("express").Router();
 const fs = require("fs"); // file sharing module
 const { v4: uuidv4 } = require("uuid"); // Creates unique ID for each note
-const notesDB = require("../db/db.json");
+const savedNotes = require("../db/db.json");
 
 router
-  .route("/api/notes")
+  .route("/notes")
   .get((req, res) => {
     console.log(`GET REQUEST AT api/notes MADE`);
-    res.json(notesDB);
+    res.json(savedNotes);
   })
   .post((req, res) => {
     console.log(`${req.method} has been receieved`);
