@@ -26,7 +26,7 @@ const hide = (elem) => {
 let activeNote = {};
 
 
-// FETCH METHODS
+// Gets old notes
 const getNotes = () =>
   fetch('/api/notes', {
     method: 'GET',
@@ -35,6 +35,7 @@ const getNotes = () =>
     },
   });
 
+// Posts new note req to server
 const saveNote = (note) =>
   fetch('/api/notes', {
     method: 'POST',
@@ -73,10 +74,9 @@ const handleNoteSave = () => {
     title: noteTitle.value,
     text: noteText.value,
   };
-  console.log(newNote); //TESTING NEWNOTE
   saveNote(newNote).then(() => {
-    getAndRenderNotes();
-    renderActiveNote();
+      getAndRenderNotes(); // const getAndRenderNotes = () => getNotes().then(renderNoteList);
+      renderActiveNote();
   });
 };
 
@@ -93,7 +93,7 @@ const handleNoteDelete = (e) => {
   }
 
   deleteNote(noteId).then(() => {
-    getAndRenderNotes();
+    getAndRenderNotes(); // const getAndRenderNotes = () => getNotes().then(renderNoteList);
     renderActiveNote();
   });
 };
@@ -121,12 +121,12 @@ const handleRenderSaveBtn = () => {
 
 // Render the list of note titles
 const renderNoteList = async (notes) => {
-  console.log(notes); //TESTING NOTES GET REQUEST
-  let jsonNotes = await notes.json();
+  let jsonNotes = await notes.json(); // Sets get fetch data to var jsonNotes as readable object
+  // Clears notes every time /notes is loaded
   if (window.location.pathname === '/notes') {
     noteList.forEach((el) => (el.innerHTML = ''));
   }
-
+  
   let noteListItems = [];
 
   // Returns HTML element with or without a delete button
@@ -155,17 +155,20 @@ const renderNoteList = async (notes) => {
       liEl.append(delBtnEl);
     }
 
+    //window.reload LOOK UP LATER
     return liEl;
   };
 
+  // If no notes in array then display 'No saved Notes'
   if (jsonNotes.length === 0) {
     noteListItems.push(createLi('No saved Notes', false));
   }
 
+  // For each note, create a list element in sidebar
   jsonNotes.forEach((note) => {
     const li = createLi(note.title);
     li.dataset.note = JSON.stringify(note);
-
+    
     noteListItems.push(li);
   });
 
@@ -175,7 +178,7 @@ const renderNoteList = async (notes) => {
 };
 
 // Gets notes from the db and renders them to the sidebar
-const getAndRenderNotes = () => getNotes().then(renderNoteList);
+const getAndRenderNotes = () => getNotes().then(data => renderNoteList(data));
 
 if (window.location.pathname === '/notes') {
   saveNoteBtn.addEventListener('click', handleNoteSave);
